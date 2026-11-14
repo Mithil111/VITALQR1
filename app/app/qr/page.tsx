@@ -99,11 +99,28 @@ export default function QRPage() {
         try {
             setLoading(true);
 
-            const { data: profileData } = await supabase
+            let { data: profileData, error: profileError } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', user?.id)
                 .single();
+
+            if (profileError && profileError.code !== 'PGRST116') throw profileError;
+
+            if (!profileData) {
+                const { data: newProfile, error: createError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: user?.id,
+                        full_name: user?.email?.split('@')[0] || 'User',
+                        language_preference: 'en',
+                    })
+                    .select()
+                    .single();
+                if (createError) throw createError;
+                profileData = newProfile;
+            }
+
             setProfile(profileData);
 
             const { data: conditionsData } = await supabase

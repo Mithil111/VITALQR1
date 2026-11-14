@@ -83,12 +83,28 @@ export default function ProfilePage() {
 
             if (profileError && profileError.code !== 'PGRST116') throw profileError;
 
-            if (profileData) {
-                setProfile(profileData);
-                setFullName(profileData.full_name || '');
-                setDateOfBirth(profileData.date_of_birth || '');
-                setBloodType(profileData.blood_type || '');
-                setProfilePin(profileData.profile_pin || '');
+            let activeProfile = profileData;
+
+            if (!activeProfile) {
+                const { data: newProfile, error: createError } = await supabase
+                    .from('profiles')
+                    .insert({
+                        id: user?.id,
+                        full_name: user?.email?.split('@')[0] || 'User',
+                        language_preference: 'en',
+                    })
+                    .select()
+                    .single();
+                if (createError) throw createError;
+                activeProfile = newProfile;
+            }
+
+            if (activeProfile) {
+                setProfile(activeProfile);
+                setFullName(activeProfile.full_name || '');
+                setDateOfBirth(activeProfile.date_of_birth || '');
+                setBloodType(activeProfile.blood_type || '');
+                setProfilePin(activeProfile.profile_pin || '');
             }
 
             // Fetch allergies
