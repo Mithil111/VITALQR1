@@ -36,67 +36,6 @@ export default function EmergencyProfilePage() {
         fetchEmergencyProfile();
     }, [token]);
 
-    const fetchEmergencyProfile = async () => {
-        try {
-            setLoading(true);
-            
-            // Fetch profile
-            const { data: profileData, error: profileError } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', token)
-                .single();
-
-            if (profileError) throw profileError;
-            setProfile(profileData);
-
-            // Fetch critical allergies
-            const { data: allergiesData } = await supabase
-                .from('allergies')
-                .select('*')
-                .eq('user_id', token)
-                .order('severity', { ascending: false });
-            setAllergies(allergiesData || []);
-
-            // Fetch high priority conditions
-            const { data: conditionsData } = await supabase
-                .from('medical_conditions')
-                .select('*')
-                .eq('user_id', token)
-                .order('priority_level', { ascending: false });
-            setConditions(conditionsData || []);
-
-            // Fetch medications
-            const { data: medicationsData } = await supabase
-                .from('medications')
-                .select('*')
-                .eq('user_id', token)
-                .order('created_at', { ascending: false });
-            setMedications(medicationsData || []);
-
-            // Fetch emergency contacts
-            const { data: contactsData } = await supabase
-                .from('emergency_contacts')
-                .select('*')
-                .eq('user_id', token)
-                .order('is_primary', { ascending: false });
-            setContacts(contactsData || []);
-
-            // Fetch medical documents
-            const { data: documentsData } = await supabase
-                .from('medical_documents')
-                .select('*')
-                .eq('user_id', token)
-                .order('uploaded_at', { ascending: false });
-            setDocuments(documentsData || []);
-
-        } catch (err: any) {
-            console.error('Error fetching emergency profile:', err);
-            setError('Failed to load emergency profile');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     // NEW: Check for lockout on mount
     useEffect(() => {
