@@ -149,7 +149,7 @@ ALTER TABLE public.medical_documents ENABLE ROW LEVEL SECURITY;
 -- ---- profiles ----
 DROP POLICY IF EXISTS "select_own_profile" ON public.profiles;
 CREATE POLICY "select_own_profile" ON public.profiles FOR SELECT
-  TO authenticated USING (auth.uid() = id);
+  TO authenticated USING (auth.uid()::text = id);
 
 DROP POLICY IF EXISTS "insert_own_profile" ON public.profiles;
 CREATE POLICY "insert_own_profile" ON public.profiles FOR INSERT
