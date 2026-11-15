@@ -197,7 +197,12 @@ useEffect(() => {
     const generateQRCodes = async () => {
         if (!profile) return;
 
-        const onlineURL = `${window.location.origin}/emergency/${user?.id}`;
+        if (!profile.emergency_token) {
+    console.error('Emergency token is missing from this profile.');
+    return;
+}
+
+        const onlineURL = `${window.location.origin}/emergency/${profile.emergency_token}`;
         const offlineData = createOfflineData();
 
         try {
