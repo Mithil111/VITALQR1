@@ -134,7 +134,7 @@ useEffect(() => {
                 profileData = newProfile;
             }
 
-            setProfile(profileData);
+        
 
             const { data: conditionsData } = await supabase
                 .from('medical_conditions')
@@ -164,6 +164,7 @@ useEffect(() => {
                 .eq('is_primary', true)
                 .limit(1);
             setContacts(contactsData || []);
+            setProfile(profileData);
         } catch (error) {
             console.error('Error fetching profile data:', error);
         } finally {
