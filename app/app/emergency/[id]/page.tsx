@@ -10,8 +10,8 @@ import { supabase } from '@/lib/supabaseClient';
 import type { Profile, MedicalCondition, Allergy, Medication, EmergencyContact, MedicalDocument } from '@/lib/types';
 
 export default function EmergencyProfilePage() {
-    const params = useParams();
-    const userId = params.id as string;
+     const params = useParams();
+     const token = params.id as string;
     
     const [profile, setProfile] = useState<Profile | null>(null);
     const [conditions, setConditions] = useState<MedicalCondition[]>([]);
@@ -34,7 +34,7 @@ export default function EmergencyProfilePage() {
 
     useEffect(() => {
         fetchEmergencyProfile();
-    }, [userId]);
+    }, [token]);
 
     const fetchEmergencyProfile = async () => {
         try {
@@ -44,7 +44,7 @@ export default function EmergencyProfilePage() {
             const { data: profileData, error: profileError } = await supabase
                 .from('profiles')
                 .select('*')
-                .eq('id', userId)
+                .eq('id', token)
                 .single();
 
             if (profileError) throw profileError;
@@ -54,7 +54,7 @@ export default function EmergencyProfilePage() {
             const { data: allergiesData } = await supabase
                 .from('allergies')
                 .select('*')
-                .eq('user_id', userId)
+                .eq('user_id', token)
                 .order('severity', { ascending: false });
             setAllergies(allergiesData || []);
 
@@ -62,7 +62,7 @@ export default function EmergencyProfilePage() {
             const { data: conditionsData } = await supabase
                 .from('medical_conditions')
                 .select('*')
-                .eq('user_id', userId)
+                .eq('user_id', token)
                 .order('priority_level', { ascending: false });
             setConditions(conditionsData || []);
 
@@ -70,7 +70,7 @@ export default function EmergencyProfilePage() {
             const { data: medicationsData } = await supabase
                 .from('medications')
                 .select('*')
-                .eq('user_id', userId)
+                .eq('user_id', token)
                 .order('created_at', { ascending: false });
             setMedications(medicationsData || []);
 
@@ -78,7 +78,7 @@ export default function EmergencyProfilePage() {
             const { data: contactsData } = await supabase
                 .from('emergency_contacts')
                 .select('*')
-                .eq('user_id', userId)
+                .eq('user_id', token)
                 .order('is_primary', { ascending: false });
             setContacts(contactsData || []);
 
@@ -86,7 +86,7 @@ export default function EmergencyProfilePage() {
             const { data: documentsData } = await supabase
                 .from('medical_documents')
                 .select('*')
-                .eq('user_id', userId)
+                .eq('user_id', token)
                 .order('uploaded_at', { ascending: false });
             setDocuments(documentsData || []);
 
