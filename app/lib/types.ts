@@ -1,5 +1,6 @@
 export interface Profile {
     id: string;
+    emergency_token?: string;
     full_name: string;
     date_of_birth?: string;
     blood_type?: string;
