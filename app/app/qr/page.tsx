@@ -81,19 +81,32 @@ export default function QRPage() {
         }
     }, [user]);
 
-    useEffect(() => {
-        if (profile) {
-            // Load saved customization preferences
-            setCustomText(profile.qr_custom_text || '');
-            setTextSize(profile.qr_text_size || 'medium');
-            setCardBgColor(profile.card_bg_color || '#ffffff');
-            setCardTextColor(profile.card_text_color || '#000000'); // FIXED: Now properly loads saved value
-            setQrFgColor(profile.qr_fg_color || '#000000');
-            setQrBgColor(profile.qr_bg_color || '#ffffff');
-            
-            generateQRCodes();
-        }
-    }, [profile, customText, textSize, cardBgColor, cardTextColor, qrFgColor, qrBgColor]); // ADDED: cardTextColor to dependency array
+    // Load saved customization when profile is available
+useEffect(() => {
+    if (!profile) return;
+
+    setCustomText(profile.qr_custom_text || '');
+    setTextSize(profile.qr_text_size || 'medium');
+    setCardBgColor(profile.card_bg_color || '#ffffff');
+    setCardTextColor(profile.card_text_color || '#000000');
+    setQrFgColor(profile.qr_fg_color || '#000000');
+    setQrBgColor(profile.qr_bg_color || '#ffffff');
+}, [profile]);
+
+// Generate QR codes when required data changes
+useEffect(() => {
+    if (!profile || !profile.emergency_token) return;
+
+    generateQRCodes();
+}, [
+    profile,
+    conditions,
+    allergies,
+    medications,
+    contacts,
+    qrFgColor,
+    qrBgColor
+]);
 
     const fetchProfileData = async () => {
         try {
