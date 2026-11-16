@@ -18,7 +18,7 @@
 
 3. Security
 - RLS enabled on every table.
-- Authenticated users: full CRUD on their own rows (auth.uid() = user_id / id).
+- Authenticated users: full CRUD on their own rows (auth.uid()::text = user_id::text / id).
 - Anonymous (anon): SELECT ONLY on the tables needed by the public emergency page
   (/emergency/[id] scanned by responders without an account): profiles,
   medical_conditions, allergies, medications, emergency_contacts.
@@ -168,16 +168,16 @@ CREATE POLICY "delete_own_profile" ON public.profiles FOR DELETE
 -- ---- medical_conditions ----
 DROP POLICY IF EXISTS "select_own_conditions" ON public.medical_conditions;
 CREATE POLICY "select_own_conditions" ON public.medical_conditions FOR SELECT
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "insert_own_conditions" ON public.medical_conditions;
 CREATE POLICY "insert_own_conditions" ON public.medical_conditions FOR INSERT
-  TO authenticated WITH CHECK (auth.uid() = user_id);
+  TO authenticated WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "update_own_conditions" ON public.medical_conditions;
 CREATE POLICY "update_own_conditions" ON public.medical_conditions FOR UPDATE
-  TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text) WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "delete_own_conditions" ON public.medical_conditions;
 CREATE POLICY "delete_own_conditions" ON public.medical_conditions FOR DELETE
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "public_read_conditions" ON public.medical_conditions;
 CREATE POLICY "public_read_conditions" ON public.medical_conditions FOR SELECT
   TO anon USING (true);
@@ -185,16 +185,16 @@ CREATE POLICY "public_read_conditions" ON public.medical_conditions FOR SELECT
 -- ---- allergies ----
 DROP POLICY IF EXISTS "select_own_allergies" ON public.allergies;
 CREATE POLICY "select_own_allergies" ON public.allergies FOR SELECT
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "insert_own_allergies" ON public.allergies;
 CREATE POLICY "insert_own_allergies" ON public.allergies FOR INSERT
-  TO authenticated WITH CHECK (auth.uid() = user_id);
+  TO authenticated WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "update_own_allergies" ON public.allergies;
 CREATE POLICY "update_own_allergies" ON public.allergies FOR UPDATE
-  TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text) WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "delete_own_allergies" ON public.allergies;
 CREATE POLICY "delete_own_allergies" ON public.allergies FOR DELETE
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "public_read_allergies" ON public.allergies;
 CREATE POLICY "public_read_allergies" ON public.allergies FOR SELECT
   TO anon USING (true);
@@ -202,16 +202,16 @@ CREATE POLICY "public_read_allergies" ON public.allergies FOR SELECT
 -- ---- medications ----
 DROP POLICY IF EXISTS "select_own_medications" ON public.medications;
 CREATE POLICY "select_own_medications" ON public.medications FOR SELECT
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "insert_own_medications" ON public.medications;
 CREATE POLICY "insert_own_medications" ON public.medications FOR INSERT
-  TO authenticated WITH CHECK (auth.uid() = user_id);
+  TO authenticated WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "update_own_medications" ON public.medications;
 CREATE POLICY "update_own_medications" ON public.medications FOR UPDATE
-  TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text) WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "delete_own_medications" ON public.medications;
 CREATE POLICY "delete_own_medications" ON public.medications FOR DELETE
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "public_read_medications" ON public.medications;
 CREATE POLICY "public_read_medications" ON public.medications FOR SELECT
   TO anon USING (true);
@@ -219,16 +219,16 @@ CREATE POLICY "public_read_medications" ON public.medications FOR SELECT
 -- ---- emergency_contacts ----
 DROP POLICY IF EXISTS "select_own_contacts" ON public.emergency_contacts;
 CREATE POLICY "select_own_contacts" ON public.emergency_contacts FOR SELECT
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "insert_own_contacts" ON public.emergency_contacts;
 CREATE POLICY "insert_own_contacts" ON public.emergency_contacts FOR INSERT
-  TO authenticated WITH CHECK (auth.uid() = user_id);
+  TO authenticated WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "update_own_contacts" ON public.emergency_contacts;
 CREATE POLICY "update_own_contacts" ON public.emergency_contacts FOR UPDATE
-  TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text) WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "delete_own_contacts" ON public.emergency_contacts;
 CREATE POLICY "delete_own_contacts" ON public.emergency_contacts FOR DELETE
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "public_read_contacts" ON public.emergency_contacts;
 CREATE POLICY "public_read_contacts" ON public.emergency_contacts FOR SELECT
   TO anon USING (true);
@@ -236,16 +236,16 @@ CREATE POLICY "public_read_contacts" ON public.emergency_contacts FOR SELECT
 -- ---- medical_documents (owner only, no public access) ----
 DROP POLICY IF EXISTS "select_own_documents" ON public.medical_documents;
 CREATE POLICY "select_own_documents" ON public.medical_documents FOR SELECT
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "insert_own_documents" ON public.medical_documents;
 CREATE POLICY "insert_own_documents" ON public.medical_documents FOR INSERT
-  TO authenticated WITH CHECK (auth.uid() = user_id);
+  TO authenticated WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "update_own_documents" ON public.medical_documents;
 CREATE POLICY "update_own_documents" ON public.medical_documents FOR UPDATE
-  TO authenticated USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text) WITH CHECK (auth.uid()::text = user_id::text);
 DROP POLICY IF EXISTS "delete_own_documents" ON public.medical_documents;
 CREATE POLICY "delete_own_documents" ON public.medical_documents FOR DELETE
-  TO authenticated USING (auth.uid() = user_id);
+  TO authenticated USING (auth.uid()::text = user_id::text);
 
 -- ============ 4. GRANTS ============
 
