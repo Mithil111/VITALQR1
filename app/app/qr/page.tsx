@@ -881,5 +881,3 @@ For full medical profile, scan the ONLINE QR code.
         </div>
     );
 }
-
-import { QrCode as QrCodeIcon } from 'lucide-react';
