@@ -153,20 +153,17 @@ CREATE POLICY "select_own_profile" ON public.profiles FOR SELECT
 
 DROP POLICY IF EXISTS "insert_own_profile" ON public.profiles;
 CREATE POLICY "insert_own_profile" ON public.profiles FOR INSERT
-  TO authenticated WITH CHECK (auth.uid() = id);
+  TO authenticated WITH CHECK (auth.uid()::text = id);
 
 DROP POLICY IF EXISTS "update_own_profile" ON public.profiles;
 CREATE POLICY "update_own_profile" ON public.profiles FOR UPDATE
-  TO authenticated USING (auth.uid() = id) WITH CHECK (auth.uid() = id);
+ TO authenticated USING (auth.uid()::text = id)
+ WITH CHECK (auth.uid()::text = id);
 
 DROP POLICY IF EXISTS "delete_own_profile" ON public.profiles;
 CREATE POLICY "delete_own_profile" ON public.profiles FOR DELETE
-  TO authenticated USING (auth.uid() = id);
+ TO authenticated USING (auth.uid()::text = id);
 
--- Public emergency page (scanned QR, no login): read-only
-DROP POLICY IF EXISTS "public_read_profile" ON public.profiles;
-CREATE POLICY "public_read_profile" ON public.profiles FOR SELECT
-  TO anon USING (true);
 
 -- ---- medical_conditions ----
 DROP POLICY IF EXISTS "select_own_conditions" ON public.medical_conditions;
